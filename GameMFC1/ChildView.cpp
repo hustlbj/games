@@ -164,6 +164,7 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 		m_heroPos.left += 10;
 		m_heroPos.right += 10;
 		InvalidateRect(&m_client); //使窗口无效，产生WM_PAINT消息，重绘窗口
+		//ee
 		break;
 	default:
 		break;
