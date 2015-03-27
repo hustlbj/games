@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameMFC1", "GameMFC1\GameMF
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CirclePacking", "CirclePacking\CirclePacking.vcxproj", "{EDB4917D-A0BE-4996-92E0-60A7491DD454}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASearch", "ASearch\ASearch.vcxproj", "{FF8B8CEC-65D0-4148-865C-614B7E8C82E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{EDB4917D-A0BE-4996-92E0-60A7491DD454}.Debug|Win32.Build.0 = Debug|Win32
 		{EDB4917D-A0BE-4996-92E0-60A7491DD454}.Release|Win32.ActiveCfg = Release|Win32
 		{EDB4917D-A0BE-4996-92E0-60A7491DD454}.Release|Win32.Build.0 = Release|Win32
+		{FF8B8CEC-65D0-4148-865C-614B7E8C82E8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF8B8CEC-65D0-4148-865C-614B7E8C82E8}.Debug|Win32.Build.0 = Debug|Win32
+		{FF8B8CEC-65D0-4148-865C-614B7E8C82E8}.Release|Win32.ActiveCfg = Release|Win32
+		{FF8B8CEC-65D0-4148-865C-614B7E8C82E8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
