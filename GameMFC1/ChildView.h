@@ -16,12 +16,21 @@ public:
 
 // 特性
 public:
+	struct shero
+	{
+		CImage hero; //保存英雄的图像
+		int x;  //保存英雄的位置
+		int y;
+		int width;
+		int height;
+		int direct;  //保存英雄的方向
+		int frame;  //运动到第几张图片
+	} MyHero;
 	CRect m_client; //客户区大小
-	CDC m_bgcDC;  //暂存图片的源DC
-	CBitmap m_bgBitmap;//背景图片bitmap
+	CDC m_cacheDC;  //缓存图片的源DC
+	CBitmap m_cacheBitmap; //缓冲位图 
 	CImage m_bg; //背景图片image
-	CRect m_heroPos; //保存英雄的位置
-	CImage m_hero; //英雄图片
+
 // 操作
 public:
 	static void TranspatentPNG(CImage *png);
@@ -43,5 +52,6 @@ public:
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };
 
