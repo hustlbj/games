@@ -127,9 +127,11 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	case 't':
 	case 'T':
 		SetTimer(1, 100, NULL);
+		break;
 	case 'i':
 	case 'I':
 		KillTimer(1);
+		break;
 	default:
 		break;
 	}
@@ -164,33 +166,9 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 		m_heroPos.left += 10;
 		m_heroPos.right += 10;
 		InvalidateRect(&m_client); //使窗口无效，产生WM_PAINT消息，重绘窗口
-		//ee
 		break;
 	default:
 		break;
 	}
 }
 
-
-int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (CWnd::OnCreate(lpCreateStruct) == -1)
-		return -1;
-
-#3016
-
-	@R0
-		return -1;
-
-#3016
-
-	@R0
-
-#3016
-
-		@R0
-		// TODO:  在此添加您专用的创建代码
-
-		@R0
-		return 0;
-}
