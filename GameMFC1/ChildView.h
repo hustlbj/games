@@ -31,9 +31,14 @@ public:
 	CBitmap m_cacheBitmap; //缓冲位图 
 	CImage m_bg; //背景图片image
 
+	int m_xMapStart; //x方向上地图的起始点
+	int m_mapWidth; //背景地图的宽度
+
 // 操作
 public:
 	static void TranspatentPNG(CImage *png);
+	void GetMapStartX();
+	int GetScreenX(int xHero, int mapWidth);
 
 // 重写
 	protected:

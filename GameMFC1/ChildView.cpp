@@ -19,6 +19,9 @@
 #define RIGHT 2
 #define UP 3
 
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
 // CChildView
 
 CChildView::CChildView()
@@ -54,7 +57,9 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
 		::LoadCursor(NULL, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW+1), NULL);
 
-	m_bg.Load("res\\bg.bmp"); //载入背景图片
+	m_bg.Load("res\\bigbg.png"); //载入背景图片
+	m_mapWidth = m_bg.GetWidth();
+	m_xMapStart = 0; //设置地图初始从最左端开始显示
 	MyHero.hero.Load("res\\heroMove.png"); //使用CImage对象载入png图片，资源相对路径
 	CChildView::TranspatentPNG(&MyHero.hero); //使背景色透明，原始图像的背景本身要是透明的
 
@@ -70,6 +75,41 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
+//计算地图左端x开始位置
+void CChildView::GetMapStartX()
+{
+	//如果人物不在最左边和最右边半个屏幕内时，地图的起始坐标是需要根据人物位置计算的
+	if (MyHero.x < m_mapWidth - WINDOW_WIDTH / 2 && MyHero.x > WINDOW_WIDTH / 2)
+		m_xMapStart = MyHero.x - WINDOW_WIDTH / 2;
+}
+
+//获取人物在屏幕上的坐标（xHero是在整张地图上的绝对坐标，GetScreenX返回在屏幕上的相对坐标）
+int CChildView::GetScreenX(int xHero, int mapWidth)
+{
+	//如果人物不在最左边和最右边半个屏幕内时，那么人物就出在屏幕中间
+	if (xHero < mapWidth - WINDOW_WIDTH / 2 && xHero > WINDOW_WIDTH / 2)
+		return WINDOW_WIDTH / 2;
+	else if (xHero <= WINDOW_WIDTH / 2 && xHero >= 0) //在最左边半个屏幕时，人物在屏幕上的位置就是自己的x坐标
+	{
+		return xHero;
+	}
+	else if (xHero < 0) //还必须让整张英雄图片能够不跑出最左边
+	{
+		MyHero.x = 0;
+		return MyHero.x;
+	}
+	else if (xHero <= mapWidth - MyHero.width) //在最右边半个屏幕
+	{
+		return WINDOW_WIDTH - (mapWidth - xHero);
+	}
+	else //还必须让整张英雄图片能够不跑出最右边
+	{
+		MyHero.x = mapWidth - MyHero.width;
+		return WINDOW_WIDTH - (mapWidth - MyHero.x);
+	}
+		
+}
+
 void CChildView::OnPaint() 
 {
 	//CPaintDC dc(this); // 用于绘制的设备上下文
@@ -83,14 +123,17 @@ void CChildView::OnPaint()
 	m_cacheBitmap.CreateCompatibleBitmap(cDC, m_client.Width(), m_client.Height());
 	m_cacheDC.SelectObject(&m_cacheBitmap);
 
+	GetMapStartX();
+
 	//m_bg.Draw(*cDC, m_client); //画背景
 	//将背景先画在缓冲DC上
-	m_bg.Draw(m_cacheDC, m_client);
+	//m_bg.Draw(m_cacheDC, m_client);
+	m_bg.Draw(m_cacheDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, m_xMapStart, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
 	//将英雄贴在缓冲DC上
-	
 	//如果不是CImage类贴图而是CBitmap，还可以使用cDC->TransparentBlt()来绘制背景色透明的贴图
 	//函数参数列表：目的DC对象，起始x，起始y，宽度，高度，源图是根据帧数和方向从大图中截取一部分
-	MyHero.hero.Draw(m_cacheDC, MyHero.x, MyHero.y, MyHero.width, MyHero.height, MyHero.frame*MyHero.width, MyHero.direct*MyHero.height, MyHero.width, MyHero.height); //画英雄
+	MyHero.hero.Draw(m_cacheDC, GetScreenX(MyHero.x, m_mapWidth), MyHero.y, MyHero.width, MyHero.height, MyHero.frame*MyHero.width, MyHero.direct*MyHero.height, MyHero.width, MyHero.height); //画英雄
 	
 	cDC->BitBlt(0, 0, m_client.Width(), m_client.Height(), &m_cacheDC, 0, 0, SRCCOPY);
 	
@@ -201,7 +244,7 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// TODO:  在此添加您专用的创建代码
+	//
 	SetTimer(TIMER_PAINT, 10, NULL);
 	SetTimer(TIMER_HEROMOVE, 100, NULL);
 	return 0;

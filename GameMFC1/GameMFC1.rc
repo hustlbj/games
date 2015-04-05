@@ -260,6 +260,7 @@ END
 IDB_PNG1                PNG                     "res\\hero.png"
 IDB_PNG2                PNG                     "res\\hero_No.png"
 IDB_PNG3                PNG                     "res\\heroMove.png"
+IDB_PNG4                PNG                     "res\\bigbg.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //
