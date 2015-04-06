@@ -125,6 +125,13 @@
     <Image Include="res\hero.png" />
     <Image Include="res\heroMove.png" />
     <Image Include="res\hero_No.png" />
+    <Image Include="res\snow\0.png" />
+    <Image Include="res\snow\1.png" />
+    <Image Include="res\snow\2.png" />
+    <Image Include="res\snow\3.png" />
+    <Image Include="res\snow\4.png" />
+    <Image Include="res\snow\5.png" />
+    <Image Include="res\snow\6.png" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
     <Image Include="UserImages.bmp" />

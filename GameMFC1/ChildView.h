@@ -5,6 +5,7 @@
 
 #pragma once
 
+#define SNOW_NUMBER 100
 
 // CChildView 窗口
 
@@ -16,6 +17,14 @@ public:
 
 // 特性
 public:
+	struct snow
+	{
+		int x;
+		int y;
+		int number; //粒子的编号，共七种粒子
+	}Snow[SNOW_NUMBER];
+	CImage m_snowMap[7]; //雪花图片
+
 	struct shero
 	{
 		CImage hero; //保存英雄的图像
@@ -39,6 +48,8 @@ public:
 	static void TranspatentPNG(CImage *png);
 	void GetMapStartX();
 	int GetScreenX(int xHero, int mapWidth);
+	void initSnow();
+	void DrawSnow();
 
 // 重写
 	protected:

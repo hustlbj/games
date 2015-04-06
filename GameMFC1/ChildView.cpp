@@ -72,7 +72,53 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 	MyHero.width = 80;
 	MyHero.height = 80;
 
+	//加载雪花图像
+	char buf[20];
+	for (int i = 0; i < 7; i++)
+	{
+		sprintf(buf, "res\\snow\\%d.png", i);
+		m_snowMap[i].Load(buf);
+	}
+	//初始化雪花粒子:水平和垂直位置随机，图片样式随机
+	initSnow();
+
 	return TRUE;
+}
+
+void CChildView::initSnow()
+{
+	for (int i = 0; i < SNOW_NUMBER; i++)
+	{
+		Snow[i].x = rand() % WINDOW_WIDTH;
+		Snow[i].y = rand() % WINDOW_HEIGHT;
+		Snow[i].number = rand() % 7;
+	}
+}
+
+void CChildView::DrawSnow()
+{
+	for (int i = 0; i < SNOW_NUMBER; i++)
+	{
+		//将粒子画到缓冲DC中
+		m_snowMap[Snow[i].number].Draw(m_cacheDC, Snow[i].x, Snow[i].y, 32, 32);
+		//对粒子位置进行下一轮更新
+		Snow[i].y += 1;
+		if (Snow[i].y >= WINDOW_HEIGHT) // 当落到屏幕最底下时重新回到最上方
+			Snow[i].y = 0;
+
+		if (rand() % 2 == 0) //在水平方向上也发生移位，像有风一样
+			Snow[i].x += 1;
+		else
+			Snow[i].x -= 1;
+
+		if (Snow[i].x < 0)
+			Snow[i].x = WINDOW_WIDTH;
+		else if (Snow[i].x >= WINDOW_WIDTH)
+			Snow[i].x = 0;
+		else
+			;
+
+	}
 }
 
 //计算地图左端x开始位置
@@ -135,6 +181,9 @@ void CChildView::OnPaint()
 	//函数参数列表：目的DC对象，起始x，起始y，宽度，高度，源图是根据帧数和方向从大图中截取一部分
 	MyHero.hero.Draw(m_cacheDC, GetScreenX(MyHero.x, m_mapWidth), MyHero.y, MyHero.width, MyHero.height, MyHero.frame*MyHero.width, MyHero.direct*MyHero.height, MyHero.width, MyHero.height); //画英雄
 	
+	//绘制雪花粒子
+	DrawSnow();
+
 	cDC->BitBlt(0, 0, m_client.Width(), m_client.Height(), &m_cacheDC, 0, 0, SRCCOPY);
 	
 	// 不要为绘制消息而调用 CWnd::OnPaint()
