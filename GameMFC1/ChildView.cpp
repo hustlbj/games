@@ -72,6 +72,16 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 	MyHero.width = 80;
 	MyHero.height = 80;
 
+	//加载怪物
+	Monster.hero.Load("res\\monster.png");
+	TranspatentPNG(&Monster.hero);
+	Monster.width = 96;
+	Monster.height = 96;
+	Monster.direct = LEFT;
+	Monster.frame = 0;
+	Monster.x = 700;
+	Monster.y = 100;
+
 	//加载雪花图像
 	char buf[20];
 	for (int i = 0; i < 7; i++)
@@ -80,12 +90,12 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 		m_snowMap[i].Load(buf);
 	}
 	//初始化雪花粒子:水平和垂直位置随机，图片样式随机
-	initSnow();
+	InitSnow();
 
 	return TRUE;
 }
 
-void CChildView::initSnow()
+void CChildView::InitSnow()
 {
 	for (int i = 0; i < SNOW_NUMBER; i++)
 	{
@@ -156,6 +166,47 @@ int CChildView::GetScreenX(int xHero, int mapWidth)
 		
 }
 
+void CChildView::UpdateMonster()
+{
+	if (Monster.x < MyHero.x)
+	{
+		Monster.x++;
+		Monster.direct = RIGHT;
+	}
+	else if (Monster.x > MyHero.x)
+	{
+		Monster.x--;
+		Monster.direct = LEFT;
+	}
+
+	if (Monster.y < MyHero.y)
+	{
+		Monster.y++;
+	}
+	else
+	{
+		Monster.y--;
+	}
+	MyHero.Xcenter = MyHero.x + MyHero.width / 2;
+	MyHero.Ycenter = MyHero.y + MyHero.height / 2;
+	Monster.Xcenter = Monster.x + Monster.width / 2;
+	Monster.Ycenter = Monster.y + Monster.height / 2;
+}
+
+BOOL CChildView::IsCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2 )
+{
+	//两个矩形体碰撞检测，通过检测其中一个矩形的中心是否落在另一个矩形的碰撞区域内
+	if (x1 < x2 + (w1 / 2 + w2 / 2) && x1 > x2 - (w1 / 2 + w2 / 2) &&
+		y1 < y2 + (h1 / 2 + h2 / 2) && y1 > y2 - (h1 / 2 + h2 / 2))
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
 void CChildView::OnPaint() 
 {
 	//CPaintDC dc(this); // 用于绘制的设备上下文
@@ -181,6 +232,25 @@ void CChildView::OnPaint()
 	//函数参数列表：目的DC对象，起始x，起始y，宽度，高度，源图是根据帧数和方向从大图中截取一部分
 	MyHero.hero.Draw(m_cacheDC, GetScreenX(MyHero.x, m_mapWidth), MyHero.y, MyHero.width, MyHero.height, MyHero.frame*MyHero.width, MyHero.direct*MyHero.height, MyHero.width, MyHero.height); //画英雄
 	
+	//将怪物贴在缓冲DC上
+	Monster.hero.Draw(m_cacheDC, GetScreenX(Monster.x, m_mapWidth), Monster.y, Monster.width, Monster.height, Monster.frame*Monster.width, Monster.direct*Monster.height, Monster.width, Monster.height);
+
+	m_cacheDC.SetBkMode(TRANSPARENT);
+	m_cacheDC.SetTextColor(RGB(255,0,0));
+
+	//怪物状态更新
+	UpdateMonster();
+	//检测是否碰撞
+	if (IsCollision(Monster.Xcenter, Monster.Ycenter, Monster.width, Monster.height,
+		MyHero.Xcenter, MyHero.Ycenter, MyHero.width, MyHero.height))
+	{
+		m_cacheDC.TextOutA(0, 0, "发生碰撞");
+	}
+	else
+	{
+		m_cacheDC.TextOutA(0, 0, "没有碰撞");
+	}
+
 	//绘制雪花粒子
 	DrawSnow();
 
@@ -278,9 +348,14 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 		InvalidateRect(&m_client); //使窗口无效，产生WM_PAINT消息，重绘窗口
 		break;
 	case TIMER_HEROMOVE:
+	{
 		MyHero.frame ++;
 		if (MyHero.frame == 4)
 			MyHero.frame = 0;
+		Monster.frame ++;
+		if (Monster.frame == 4)
+			Monster.frame = 0;
+	}
 	default:
 		break;
 	}

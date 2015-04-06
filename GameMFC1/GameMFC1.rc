@@ -268,6 +268,7 @@ IDB_PNG8                PNG                     "res\\snow\\3.png"
 IDB_PNG9                PNG                     "res\\snow\\4.png"
 IDB_PNG10               PNG                     "res\\snow\\5.png"
 IDB_PNG11               PNG                     "res\\snow\\6.png"
+IDB_PNG12               PNG                     "res\\monster.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -34,7 +34,9 @@ public:
 		int height;
 		int direct;  //保存英雄的方向
 		int frame;  //运动到第几张图片
-	} MyHero;
+		int Xcenter;
+		int Ycenter;
+	} MyHero, Monster;
 	CRect m_client; //客户区大小
 	CDC m_cacheDC;  //缓存图片的源DC
 	CBitmap m_cacheBitmap; //缓冲位图 
@@ -48,8 +50,10 @@ public:
 	static void TranspatentPNG(CImage *png);
 	void GetMapStartX();
 	int GetScreenX(int xHero, int mapWidth);
-	void initSnow();
+	void InitSnow();
 	void DrawSnow();
+	void UpdateMonster();
+	BOOL IsCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
 
 // 重写
 	protected:

@@ -125,6 +125,7 @@
     <Image Include="res\hero.png" />
     <Image Include="res\heroMove.png" />
     <Image Include="res\hero_No.png" />
+    <Image Include="res\monster.png" />
     <Image Include="res\snow\0.png" />
     <Image Include="res\snow\1.png" />
     <Image Include="res\snow\2.png" />
